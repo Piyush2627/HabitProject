@@ -1,0 +1,72 @@
+[
+  {
+    "id": 1,
+    "name": "Mignon Nanetti",
+    "frequency": "monthly",
+    "completedDates": [{}, {}, {}, {}, {}],
+    "createdAt": "2024-02-21T07:46:09Z"
+  },
+  {
+    "id": 2,
+    "name": "Cammy Lucien",
+    "frequency": "daily",
+    "completedDates": [{}],
+    "createdAt": "2023-12-04T21:02:39Z"
+  },
+  {
+    "id": 3,
+    "name": "Antonietta Coling",
+    "frequency": "monthly",
+    "completedDates": [],
+    "createdAt": "2024-08-27T04:49:24Z"
+  },
+  {
+    "id": 4,
+    "name": "Prudence Cragg",
+    "frequency": "weekly",
+    "completedDates": [{}, {}, {}, {}, {}],
+    "createdAt": "2024-05-07T11:17:14Z"
+  },
+  {
+    "id": 5,
+    "name": "Clayton Dumberrill",
+    "frequency": "weekly",
+    "completedDates": [{}, {}, {}, {}],
+    "createdAt": "2023-12-30T18:34:57Z"
+  },
+  {
+    "id": 6,
+    "name": "Clemmie Cooney",
+    "frequency": "monthly",
+    "completedDates": [{}, {}, {}, {}, {}],
+    "createdAt": "2023-11-27T08:51:21Z"
+  },
+  {
+    "id": 7,
+    "name": "Paul Restall",
+    "frequency": "weekly",
+    "completedDates": [{}, {}, {}],
+    "createdAt": "2023-12-30T00:33:41Z"
+  },
+  {
+    "id": 8,
+    "name": "Charmine Underdown",
+    "frequency": "monthly",
+    "completedDates": [{}, {}],
+    "createdAt": "2024-02-25T18:51:45Z"
+  },
+  {
+    "id": 9,
+    "name": "Evita Lantiff",
+    "frequency": "weekly",
+    "completedDates": [{}],
+    "createdAt": "2024-03-17T01:18:11Z"
+  },
+  {
+    "id": 10,
+    "name": "Chrystal Jiles",
+    "frequency": "weekly",
+    "completedDates": [],
+    "createdAt": "2024-07-03T04:09:49Z"
+  }
+]
