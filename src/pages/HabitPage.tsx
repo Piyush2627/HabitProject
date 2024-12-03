@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { TbSearch } from "react-icons/tb";
 import Calender from "../components/common/Calender";
+import InViewComponent from "./InViewComponent";
 
 interface Habits {
   _id: string;
@@ -154,6 +155,7 @@ function HabitPage() {
       ) : (
         <p>No habits found. Start by adding one!</p>
       )}
+      <InViewComponent />
       <Calender />
     </div>
   );
