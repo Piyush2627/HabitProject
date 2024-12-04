@@ -97,36 +97,44 @@ function HabitPage() {
   return (
     <div className="p-5">
       <div className="mb-4">
-        <h1 className="mb-4 text-6xl font-bold leading-7">Habit Tracker</h1>
-        <p className="font-semibold text-gray-600">
+        <h1 className="mb-4 text-6xl font-bold leading-7 text-white">
+          Habit Tracker
+        </h1>
+        <p className="font-semibold text-gray-300">
           Lorem ipsum dolor sit amet consectetur adipisicing elit.
         </p>
       </div>
       <div className="mb-6">
-        <div className="flex items-center rounded border p-2">
+        <div className="flex items-center rounded border border-zinc-700 p-2">
           <TbSearch className="size-8" />
           <input
             type="text"
-            className="w-full px-4 py-2 text-2xl focus:border-0 focus:outline-none"
+            className="w-full bg-zinc-900 px-4 py-2 text-2xl focus:border-0 focus:outline-none"
             placeholder="Enter habit name"
             value={newHabit.name || ""}
             onChange={(e) => updateTaskProperty("name", e.target.value)}
           />
         </div>
         <select
-          className="w-full rounded border px-4 py-2"
+          className="font-white mt-2 w-full rounded border border-zinc-700 bg-zinc-900 px-4 py-2 text-white"
           value={newHabit.frequency || ""}
           onChange={(e) => updateTaskProperty("frequency", e.target.value)}
         >
-          <option value="" disabled>
+          <option value="" className="text-white" disabled>
             Select Frequency
           </option>
-          <option value="Daily">Daily</option>
-          <option value="Weekly">Weekly</option>
-          <option value="Monthly">Monthly</option>
+          <option className="text-white" value="Daily">
+            Daily
+          </option>
+          <option className="text-white" value="Weekly">
+            Weekly
+          </option>
+          <option className="text-white" value="Monthly">
+            Monthly
+          </option>
         </select>
         <button
-          className="mt-4 w-full rounded border bg-blue-400 px-4 py-2 text-white"
+          className="mt-4 w-full rounded border bg-zinc-400 px-4 py-2 text-white"
           onClick={postHabit}
         >
           Add Habit

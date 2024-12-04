@@ -1,5 +1,5 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import MainLayout from "./MainLayout";
+import MainLayout from "../layouts/MainLayout";
 const router = createBrowserRouter([
   {
     path: "/",
