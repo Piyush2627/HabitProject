@@ -54,7 +54,7 @@ function MainLayout() {
         </div>
       )}
       <div className={` ${sideNavBar ? "hidden" : "flex"}`}>
-        <div className="w-60 bg-black p-5">
+        <div className="w-60 bg-zinc-700 p-5">
           <button
             onClick={handleClick}
             className="rounded-md hover:bg-gray-200 lg:px-2 lg:py-1"

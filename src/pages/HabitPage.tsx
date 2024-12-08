@@ -1,7 +1,5 @@
 import { useEffect, useState } from "react";
-import { TbSearch } from "react-icons/tb";
 import Calender from "../components/common/Calender";
-import InViewComponent from "./InViewComponent";
 
 interface Habits {
   _id: string;
@@ -97,30 +95,25 @@ function HabitPage() {
   return (
     <div className="p-5">
       <div className="mb-4">
-        <h1 className="mb-4 text-6xl font-bold leading-7 text-white">
-          Habit Tracker
-        </h1>
+        <h1 className="text-4xl font-bold text-white">Habit Tracker</h1>
         <p className="font-semibold text-gray-300">
           Lorem ipsum dolor sit amet consectetur adipisicing elit.
         </p>
       </div>
-      <div className="mb-6">
-        <div className="flex items-center rounded border border-zinc-700 p-2">
-          <TbSearch className="size-8" />
-          <input
-            type="text"
-            className="w-full bg-zinc-900 px-4 py-2 text-2xl focus:border-0 focus:outline-none"
-            placeholder="Enter habit name"
-            value={newHabit.name || ""}
-            onChange={(e) => updateTaskProperty("name", e.target.value)}
-          />
-        </div>
+      <div className="mb-6 w-96">
+        <input
+          type="text"
+          className="w-full rounded border border-zinc-700 bg-zinc-900 px-4 py-2 text-2xl"
+          placeholder="Enter habit name"
+          value={newHabit.name || ""}
+          onChange={(e) => updateTaskProperty("name", e.target.value)}
+        />
         <select
           className="font-white mt-2 w-full rounded border border-zinc-700 bg-zinc-900 px-4 py-2 text-white"
           value={newHabit.frequency || ""}
           onChange={(e) => updateTaskProperty("frequency", e.target.value)}
         >
-          <option value="" className="text-white" disabled>
+          <option value="" className="bg-zinc-800" disabled>
             Select Frequency
           </option>
           <option className="text-white" value="Daily">
@@ -134,7 +127,7 @@ function HabitPage() {
           </option>
         </select>
         <button
-          className="mt-4 w-full rounded border bg-zinc-400 px-4 py-2 text-white"
+          className="mt-4 w-full rounded border bg-zinc-400 px-4 py-2 font-bold text-zinc-800"
           onClick={postHabit}
         >
           Add Habit
@@ -163,7 +156,6 @@ function HabitPage() {
       ) : (
         <p>No habits found. Start by adding one!</p>
       )}
-      <InViewComponent />
       <Calender />
     </div>
   );
