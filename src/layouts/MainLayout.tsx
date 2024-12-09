@@ -2,9 +2,11 @@ import { useEffect, useRef } from "react";
 import React from "react";
 //icons
 import { TbMenu } from "react-icons/tb";
+import { IoCloseCircleSharp } from "react-icons/io5";
+
 //components
-import HabitsPage from "../pages/HabitPage";
 import SideNavigation from "../components/ui/SideNavigation";
+import CreateHabitPage from "../pages/CreateHabitPage";
 
 function MainLayout() {
   const [sideNavBar, setSideNavBar] = React.useState(false);
@@ -54,20 +56,18 @@ function MainLayout() {
         </div>
       )}
       <div className={` ${sideNavBar ? "hidden" : "flex"}`}>
-        <div className="w-60 bg-zinc-700 p-5">
+        <div className="w-60 bg-zinc-700 p-2">
           <button
             onClick={handleClick}
             className="rounded-md hover:bg-gray-200 lg:px-2 lg:py-1"
           >
-            hello
+            <IoCloseCircleSharp className="text-white" />
           </button>
+          <SideNavigation />
         </div>
       </div>
       <div className="grow">
-        <div className="mx-auto w-2/5 rounded-b-[90px] bg-white p-2 text-center">
-          Links{" "}
-        </div>
-        <HabitsPage />
+        <CreateHabitPage />
       </div>
     </div>
   );

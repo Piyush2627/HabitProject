@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import Calender from "../components/common/Calender";
 
 interface Habits {
   _id: string;
@@ -10,7 +9,7 @@ interface Habits {
   __v: number;
 }
 
-function HabitPage() {
+function CreateHabitPage() {
   const [data, setData] = useState<Habits[]>([]);
   const [newHabit, setNewHabit] = useState<Partial<Habits>>({});
   const [isDeleteHabit, setIsDeleteHabit] = useState<string>("");
@@ -93,9 +92,9 @@ function HabitPage() {
   };
 
   return (
-    <div className="p-5">
+    <div className="p-4">
       <div className="mb-4">
-        <h1 className="text-4xl font-bold text-white">Habit Tracker</h1>
+        <h1 className="text-4xl font-bold text-white">Create A New Tracker</h1>
         <p className="font-semibold text-gray-300">
           Lorem ipsum dolor sit amet consectetur adipisicing elit.
         </p>
@@ -108,6 +107,7 @@ function HabitPage() {
           value={newHabit.name || ""}
           onChange={(e) => updateTaskProperty("name", e.target.value)}
         />
+        <div className="mt-2 text-white">Repeat Frequency</div>
         <select
           className="font-white mt-2 w-full rounded border border-zinc-700 bg-zinc-900 px-4 py-2 text-white"
           value={newHabit.frequency || ""}
@@ -126,6 +126,11 @@ function HabitPage() {
             Monthly
           </option>
         </select>
+        <div className="mt-2 text-white">
+          {" "}
+          <div>Staring date</div>
+          <input type="date" className="bg-zinc-900 text-white" />
+        </div>
         <button
           className="mt-4 w-full rounded border bg-zinc-400 px-4 py-2 font-bold text-zinc-800"
           onClick={postHabit}
@@ -133,6 +138,7 @@ function HabitPage() {
           Add Habit
         </button>
       </div>
+
       {data.length > 0 ? (
         <ul className="list-disc pl-5">
           {data.map((habit) => (
@@ -154,11 +160,10 @@ function HabitPage() {
           ))}
         </ul>
       ) : (
-        <p>No habits found. Start by adding one!</p>
+        <p className="text-white">No habits found. Start by adding one!</p>
       )}
-      <Calender />
     </div>
   );
 }
 
-export default HabitPage;
+export default CreateHabitPage;
