@@ -11,6 +11,7 @@ interface Habits {
 
 function CreateHabitPage() {
   const [data, setData] = useState<Habits[]>([]);
+  const reverse = [...data].reverse();
   const [newHabit, setNewHabit] = useState<Partial<Habits>>({});
   const [isDeleteHabit, setIsDeleteHabit] = useState<string>("");
 
@@ -99,7 +100,7 @@ function CreateHabitPage() {
           Lorem ipsum dolor sit amet consectetur adipisicing elit.
         </p>
       </div>
-      <div className="mb-6 w-96">
+      <div className="mb-6">
         <input
           type="text"
           className="w-full rounded border border-zinc-700 bg-zinc-900 px-4 py-2 text-2xl"
@@ -139,23 +140,36 @@ function CreateHabitPage() {
         </button>
       </div>
 
+      <div className="text-lg font-bold text-white">
+        Total created habits {data.length}
+      </div>
       {data.length > 0 ? (
-        <ul className="list-disc pl-5">
-          {data.map((habit) => (
-            <li key={habit._id} className="mb-2 flex space-x-4">
-              <span className="font-semibold">{habit.name}</span>
-              <span>
-                {habit.frequency ? habit.frequency : "Frequency Not found "}
-              </span>
-              <span className="rounded bg-blue-200 px-2 font-semibold">
-                {habit.completedDates.length}
-              </span>
-              <button
-                className="text-red-500"
-                onClick={() => handleDeleteHabit(habit._id)}
-              >
-                Delete
-              </button>
+        <ul className="">
+          {reverse.map((habit) => (
+            <li
+              key={habit._id}
+              className="mb-2 flex justify-between rounded border p-4"
+            >
+              <div className="flex space-x-4">
+                <span className="space-x-4 font-semibold text-white">
+                  {habit.name}
+                </span>
+                <span className="text-white">
+                  {habit.frequency ? habit.frequency : "Frequency Not found "}
+                </span>
+                <span className="rounded bg-blue-200 px-2 font-semibold">
+                  {habit.completedDates.length}
+                </span>
+              </div>
+              <div className="flex space-x-4">
+                <button
+                  className="text-red-500"
+                  onClick={() => handleDeleteHabit(habit._id)}
+                >
+                  Delete
+                </button>
+                <button className="text-white">Mark as done</button>
+              </div>
             </li>
           ))}
         </ul>
