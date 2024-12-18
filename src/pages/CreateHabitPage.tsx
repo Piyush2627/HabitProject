@@ -1,4 +1,6 @@
 import { useEffect, useState } from "react";
+//icons
+import { MdAdd } from "react-icons/md";
 
 interface Habits {
   _id: string;
@@ -14,9 +16,14 @@ function CreateHabitPage() {
   const reverse = [...data].reverse();
   const [newHabit, setNewHabit] = useState<Partial<Habits>>({});
   const [isDeleteHabit, setIsDeleteHabit] = useState<string>("");
+  const [ToggleCreateTask, setToggleCreateTask] = useState(false);
 
   const handleDeleteHabit = (habitId: string) => {
     setIsDeleteHabit(habitId);
+  };
+
+  const handleToggleCreateTask = () => {
+    setToggleCreateTask((prev) => !prev);
   };
 
   useEffect(() => {
@@ -94,51 +101,70 @@ function CreateHabitPage() {
 
   return (
     <div className="p-4">
-      <div className="mb-4">
-        <h1 className="text-4xl font-bold text-white">Create A New Tracker</h1>
-        <p className="font-semibold text-gray-300">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit.
-        </p>
-      </div>
-      <div className="mb-6">
-        <input
-          type="text"
-          className="w-full rounded border border-zinc-700 bg-zinc-900 px-4 py-2 text-2xl"
-          placeholder="Enter habit name"
-          value={newHabit.name || ""}
-          onChange={(e) => updateTaskProperty("name", e.target.value)}
-        />
-        <div className="mt-2 text-white">Repeat Frequency</div>
-        <select
-          className="font-white mt-2 w-full rounded border border-zinc-700 bg-zinc-900 px-4 py-2 text-white"
-          value={newHabit.frequency || ""}
-          onChange={(e) => updateTaskProperty("frequency", e.target.value)}
-        >
-          <option value="" className="bg-zinc-800" disabled>
-            Select Frequency
-          </option>
-          <option className="text-white" value="Daily">
-            Daily
-          </option>
-          <option className="text-white" value="Weekly">
-            Weekly
-          </option>
-          <option className="text-white" value="Monthly">
-            Monthly
-          </option>
-        </select>
-        <div className="mt-2 text-white">
-          {" "}
-          <div>Staring date</div>
-          <input type="date" className="bg-zinc-900 text-white" />
+      <div className="mb-4 flex items-center justify-between">
+        <div>
+          <h1 className="text-4xl font-bold text-white">
+            Create A New Tracker
+          </h1>
+          <p className="font-semibold text-gray-300">
+            Lorem ipsum dolor sit amet consectetur adipisicing elit.
+          </p>
         </div>
         <button
-          className="mt-4 w-full rounded border bg-zinc-400 px-4 py-2 font-bold text-zinc-800"
-          onClick={postHabit}
+          onClick={handleToggleCreateTask}
+          className="flex items-center space-x-1 rounded border bg-white px-2 py-2 font-semibold"
         >
-          Add Habit
+          {ToggleCreateTask ? (
+            "X"
+          ) : (
+            <>
+              <div>Create Habits </div>
+              <MdAdd className="size-5" />
+            </>
+          )}
         </button>
       </div>
+      {ToggleCreateTask && (
+        <div className="mb-6">
+          <input
+            type="text"
+            className="w-full rounded border border-zinc-700 bg-zinc-900 px-4 py-2 text-2xl"
+            placeholder="Enter habit name"
+            value={newHabit.name || ""}
+            onChange={(e) => updateTaskProperty("name", e.target.value)}
+          />
+          <div className="mt-2 text-white">Repeat Frequency</div>
+          <select
+            className="font-white mt-2 w-full rounded border border-zinc-700 bg-zinc-900 px-4 py-2 text-white"
+            value={newHabit.frequency || ""}
+            onChange={(e) => updateTaskProperty("frequency", e.target.value)}
+          >
+            <option value="" className="bg-zinc-800" disabled>
+              Select Frequency
+            </option>
+            <option className="text-white" value="Daily">
+              Daily
+            </option>
+            <option className="text-white" value="Weekly">
+              Weekly
+            </option>
+            <option className="text-white" value="Monthly">
+              Monthly
+            </option>
+          </select>
+          <div className="mt-2 text-white">
+            {" "}
+            <div>Staring date</div>
+            <input type="date" className="bg-zinc-900 text-white" />
+          </div>
+          <button
+            className="mt-4 w-full rounded border bg-zinc-400 px-4 py-2 font-bold text-zinc-800"
+            onClick={postHabit}
+          >
+            Add Habit
+          </button>
+        </div>
+      )}
 
       <div className="text-lg font-bold text-white">
         Total created habits {data.length}
@@ -158,7 +184,8 @@ function CreateHabitPage() {
                   {habit.frequency ? habit.frequency : "Frequency Not found "}
                 </span>
                 <span className="rounded bg-blue-200 px-2 font-semibold">
-                  {habit.completedDates.length}
+                  {habit.completedDates.length} --
+                  {habit.completedDates}
                 </span>
               </div>
               <div className="flex space-x-4">
@@ -168,7 +195,7 @@ function CreateHabitPage() {
                 >
                   Delete
                 </button>
-                <button className="text-white">Mark as done</button>
+                x<button className="text-white">Mark as done</button>
               </div>
             </li>
           ))}

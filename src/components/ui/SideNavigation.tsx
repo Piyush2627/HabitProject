@@ -40,8 +40,12 @@ function SideNavigation() {
           <BsPersonCircle className="size-8 text-white" />{" "}
         </div>
         <div>
-          <div className="text-[16px] text-white">Piyush Dahiwadkar</div>
-          <div className="text-[12px] text-white">Description</div>
+          <div className="motion-preset-slide-right-sm text-[16px] text-white">
+            Piyush Dahiwadkar
+          </div>
+          <div className="motion-preset-slide-right-sm text-[12px] text-white motion-delay-75">
+            Description
+          </div>
         </div>
       </div>
       <div className="mt-4">
