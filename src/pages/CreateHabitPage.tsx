@@ -1,208 +1,166 @@
-import { useEffect, useState } from "react";
-//icons
-import { MdAdd } from "react-icons/md";
-
-interface Habits {
-  _id: string;
-  name: string;
-  frequency: string;
-  completedDates: string[];
-  createdAt: string;
-  __v: number;
-}
+import { TbSearch } from "react-icons/tb";
+import { TbFilterEdit } from "react-icons/tb";
+import { MdOutlineAddRoad } from "react-icons/md";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { HabitType } from "../types/Types";
+import { useState } from "react";
 
 function CreateHabitPage() {
-  const [data, setData] = useState<Habits[]>([]);
-  const reverse = [...data].reverse();
-  const [newHabit, setNewHabit] = useState<Partial<Habits>>({});
-  const [isDeleteHabit, setIsDeleteHabit] = useState<string>("");
-  const [ToggleCreateTask, setToggleCreateTask] = useState(false);
+  const [habitInput, setHabitInput] = useState<HabitType>({
+    title: "",
+    frequency: 0,
+    duration: 2,
+    description: "",
+    completed: 21,
+    completedDates: [
+      {
+        dates: new Date(),
+        isSkipped: false,
+        status: false,
+      },
+    ],
+  });
 
-  const handleDeleteHabit = (habitId: string) => {
-    setIsDeleteHabit(habitId);
-  };
-
-  const handleToggleCreateTask = () => {
-    setToggleCreateTask((prev) => !prev);
-  };
-
-  useEffect(() => {
-    if (!isDeleteHabit) return;
-    const deleteHabit = async () => {
-      try {
-        const response = await fetch(
-          `http://localhost:5001/api/${isDeleteHabit}`,
-          {
-            method: "DELETE",
-          },
-        );
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-
-        setData((prevData) =>
-          prevData.filter((habit) => habit._id !== isDeleteHabit),
-        );
-      } catch (error) {
-        console.error("Error Fetching the data: ", error);
-      }
-    };
-    deleteHabit();
-  }, [isDeleteHabit]);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch("http://localhost:5001/api");
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        const habits: Habits[] = await response.json();
-        setData(habits);
-      } catch (error) {
-        console.error("Error fetching habits:", error);
-      }
-    };
-    fetchData();
-  }, []);
-
-  const updateTaskProperty = (key: keyof Habits, value: string) => {
-    setNewHabit((prev) => ({ ...prev, [key]: value }));
-  };
-
-  const postHabit = async () => {
-    if (!newHabit.name || !newHabit.frequency) {
-      alert("Please fill in all fields.");
-      return;
-    }
-    try {
-      const response = await fetch("http://localhost:5001/api", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          name: newHabit.name,
-          frequency: newHabit.frequency,
-          completedDates: [],
-          createdAt: new Date().toISOString(),
-        }),
-      });
-
+  const {
+    data: habitData,
+    isError: fetchError,
+    isLoading,
+  } = useQuery({
+    queryFn: async () => {
+      const response = await fetch("http://localhost:3000/apiH1/getHabits");
       if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+        throw new Error("Failed to fetch habits.");
       }
+      const data = await response.json();
+      return data;
+    },
+    queryKey: ["Habit"],
+  });
 
-      const createdHabit: Habits = await response.json();
-      setData((prev) => [...prev, createdHabit]);
-      setNewHabit({});
-    } catch (error) {
-      console.error("  posting habit:", error);
-    }
+  const { mutateAsync: addHabit } = useMutation({
+    mutationFn: async (habit: HabitType) => {
+      const response = await fetch("http://localhost:3000/apiH1/habit/create", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(habit),
+      });
+      if (!response.ok) {
+        throw new Error("Failed to create habit.");
+      }
+    },
+  });
+
+  const { mutateAsync: removeHabit } = useMutation({
+    mutationFn: async (id: string) => {
+      const response = await fetch(
+        `http://localhost:3000/apiH1/habit/delete/${id}`,
+        {
+          method: "DELETE",
+        },
+      );
+      if (!response.ok) {
+        throw new Error("Failed to delete habit.");
+      }
+    },
+  });
+
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
+  ) => {
+    const { name, value } = e.target;
+
+    setHabitInput((prevForm) => ({
+      ...prevForm,
+      [name]: name === "frequency" ? parseInt(value) : value,
+    }));
   };
 
   return (
-    <div className="p-4">
-      <div className="mb-4 flex items-center justify-between">
-        <div>
-          <h1 className="text-4xl font-bold text-white">
-            Create A New Tracker
-          </h1>
-          <p className="font-semibold text-gray-300">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit.
-          </p>
+    <div>
+      <div className="p-5">
+        <div className="text-2xl font-semibold capitalize text-white">
+          Create a new task
         </div>
-        <button
-          onClick={handleToggleCreateTask}
-          className="flex items-center space-x-1 rounded border bg-white px-2 py-2 font-semibold"
-        >
-          {ToggleCreateTask ? (
-            "X"
-          ) : (
-            <>
-              <div>Create Habits </div>
-              <MdAdd className="size-5" />
-            </>
-          )}
-        </button>
-      </div>
-      {ToggleCreateTask && (
-        <div className="mb-6">
+        <div className="mt-3 flex space-x-4 rounded border border-zinc-500 p-2 text-white">
+          <div className="flex items-center justify-around space-x-2 rounded bg-zinc-700 p-2 text-lg">
+            <div>
+              <TbSearch />
+            </div>
+            <div>Search</div>
+          </div>
+          <div className="flex items-center justify-around space-x-2 rounded bg-zinc-700 p-2 text-lg">
+            <div>
+              <TbFilterEdit />
+            </div>
+            <div>Filter</div>
+          </div>
+          <div className="flex items-center justify-around space-x-2 rounded bg-blue-500 p-2 text-lg">
+            <div>
+              <MdOutlineAddRoad />
+            </div>
+            <div>Create</div>
+          </div>
+        </div>
+
+        <div className="mt-2 flex space-x-4">
           <input
             type="text"
-            className="w-full rounded border border-zinc-700 bg-zinc-900 px-4 py-2 text-2xl"
-            placeholder="Enter habit name"
-            value={newHabit.name || ""}
-            onChange={(e) => updateTaskProperty("name", e.target.value)}
+            name="title"
+            className="rounded bg-zinc-600 p-2 text-white"
+            placeholder="Enter task title"
+            value={habitInput.title}
+            onChange={handleInputChange}
           />
-          <div className="mt-2 text-white">Repeat Frequency</div>
           <select
-            className="font-white mt-2 w-full rounded border border-zinc-700 bg-zinc-900 px-4 py-2 text-white"
-            value={newHabit.frequency || ""}
-            onChange={(e) => updateTaskProperty("frequency", e.target.value)}
+            name="frequency"
+            className="rounded bg-zinc-600 p-2 text-white"
+            value={habitInput.frequency}
+            onChange={handleInputChange}
           >
-            <option value="" className="bg-zinc-800" disabled>
+            <option value="" disabled>
               Select Frequency
             </option>
-            <option className="text-white" value="Daily">
-              Daily
-            </option>
-            <option className="text-white" value="Weekly">
-              Weekly
-            </option>
-            <option className="text-white" value="Monthly">
-              Monthly
-            </option>
+            <option value="1">Daily</option>
+            <option value="7">Weekly</option>
+            <option value="30">Monthly</option>
           </select>
-          <div className="mt-2 text-white">
-            {" "}
-            <div>Staring date</div>
-            <input type="date" className="bg-zinc-900 text-white" />
-          </div>
           <button
-            className="mt-4 w-full rounded border bg-zinc-400 px-4 py-2 font-bold text-zinc-800"
-            onClick={postHabit}
+            className="flex items-center justify-around space-x-2 rounded bg-blue-500 px-2 text-lg text-white"
+            onClick={() => addHabit(habitInput)}
           >
-            Add Habit
+            <div>
+              <MdOutlineAddRoad />
+            </div>
+            <div>Create</div>
           </button>
         </div>
-      )}
 
-      <div className="text-lg font-bold text-white">
-        Total created habits {data.length}
-      </div>
-      {data.length > 0 ? (
-        <ul className="">
-          {reverse.map((habit) => (
-            <li
-              key={habit._id}
-              className="mb-2 flex justify-between rounded border p-4"
-            >
-              <div className="flex space-x-4">
-                <span className="space-x-4 font-semibold text-white">
-                  {habit.name}
-                </span>
-                <span className="text-white">
-                  {habit.frequency ? habit.frequency : "Frequency Not found "}
-                </span>
-                <span className="rounded bg-blue-200 px-2 font-semibold">
-                  {habit.completedDates.length} --
-                  {habit.completedDates}
-                </span>
-              </div>
-              <div className="flex space-x-4">
+        {fetchError && (
+          <div className="mt-3 text-red-500">Error fetching habits.</div>
+        )}
+
+        {isLoading ? (
+          <div className="mt-3 text-white">Loading...</div>
+        ) : (
+          <div className="mt-3 text-white">
+            {habitData?.map((habit: HabitType) => (
+              <div key={habit._id}>
+                {habit.title}
+                {habit.completedDates.length}
+                {habit._id}
                 <button
-                  className="text-red-500"
-                  onClick={() => handleDeleteHabit(habit._id)}
+                  className="rounded bg-blue-700 p-3"
+                  onClick={() => habit._id && removeHabit(habit._id)}
                 >
-                  Delete
+                  DELETE
                 </button>
-                x<button className="text-white">Mark as done</button>
               </div>
-            </li>
-          ))}
-        </ul>
-      ) : (
-        <p className="text-white">No habits found. Start by adding one!</p>
-      )}
+            ))}
+          </div>
+        )}
+      </div>
     </div>
   );
 }

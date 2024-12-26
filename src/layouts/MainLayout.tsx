@@ -36,7 +36,7 @@ function MainLayout() {
   }, [sideNavRef]);
 
   return (
-    <div className="flex h-screen w-screen overflow-hidden bg-zinc-900">
+    <div className="flex bg-zinc-900">
       {sideNavBar && (
         <div className="group absolute left-2 top-2 rounded bg-white p-2">
           <button
