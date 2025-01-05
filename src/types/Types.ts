@@ -2,6 +2,8 @@ export type UserType = {
   name: string;
   email: string;
   password: string;
+  profileImageURL?: string;
+  createdAt?: Date;
 };
 
 export type HabitType = {

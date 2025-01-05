@@ -1,17 +1,20 @@
 import { TbSearch } from "react-icons/tb";
 import { TbFilterEdit } from "react-icons/tb";
 import { MdOutlineAddRoad } from "react-icons/md";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { HabitType } from "../types/Types";
 import { useState } from "react";
 
+const dates = new Date();
+
 function CreateHabitPage() {
+  const queryClient = useQueryClient();
   const [habitInput, setHabitInput] = useState<HabitType>({
     title: "",
     frequency: 0,
     duration: 2,
     description: "",
-    completed: 21,
+    completed: 0,
     completedDates: [
       {
         dates: new Date(),
@@ -19,6 +22,12 @@ function CreateHabitPage() {
         status: false,
       },
     ],
+  });
+
+  const [completedDates, setCompletedDates] = useState<any>({
+    dates: new Date(),
+    isSkipped: false,
+    status: false,
   });
 
   const {
@@ -34,7 +43,7 @@ function CreateHabitPage() {
       const data = await response.json();
       return data;
     },
-    queryKey: ["Habit"],
+    queryKey: ["habitQueryKey"],
   });
 
   const { mutateAsync: addHabit } = useMutation({
@@ -50,6 +59,24 @@ function CreateHabitPage() {
         throw new Error("Failed to create habit.");
       }
     },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["habitQueryKey"] });
+      console.log("Habit added successfully");
+      setHabitInput({
+        title: "",
+        frequency: 0,
+        duration: 2,
+        description: "",
+        completed: 0,
+        completedDates: [
+          {
+            dates: new Date(),
+            isSkipped: false,
+            status: false,
+          },
+        ],
+      });
+    },
   });
 
   const { mutateAsync: removeHabit } = useMutation({
@@ -63,6 +90,9 @@ function CreateHabitPage() {
       if (!response.ok) {
         throw new Error("Failed to delete habit.");
       }
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["habitQueryKey"] });
     },
   });
 
@@ -79,7 +109,7 @@ function CreateHabitPage() {
 
   return (
     <div>
-      <div className="p-5">
+      <div className="h-screen p-5">
         <div className="text-2xl font-semibold capitalize text-white">
           Create a new task
         </div>
@@ -95,12 +125,6 @@ function CreateHabitPage() {
               <TbFilterEdit />
             </div>
             <div>Filter</div>
-          </div>
-          <div className="flex items-center justify-around space-x-2 rounded bg-blue-500 p-2 text-lg">
-            <div>
-              <MdOutlineAddRoad />
-            </div>
-            <div>Create</div>
           </div>
         </div>
 
@@ -146,16 +170,33 @@ function CreateHabitPage() {
         ) : (
           <div className="mt-3 text-white">
             {habitData?.map((habit: HabitType) => (
-              <div key={habit._id}>
-                {habit.title}
-                {habit.completedDates.length}
-                {habit._id}
-                <button
-                  className="rounded bg-blue-700 p-3"
-                  onClick={() => habit._id && removeHabit(habit._id)}
-                >
-                  DELETE
-                </button>
+              <div
+                key={habit._id}
+                className="mb-2 flex items-center justify-between rounded border p-3"
+              >
+                <div className="flex items-center space-x-2">
+                  <div>{habit.title}</div>
+                  <div>
+                    {habit.frequency == 0 ? (
+                      <div className="rounded bg-slate-600 p-2">Daily</div>
+                    ) : habit.frequency == 30 ? (
+                      <div className="rounded bg-slate-600 p-2">Monthly</div>
+                    ) : (
+                      <div className="rounded bg-slate-600 p-2">Weekly</div>
+                    )}
+                  </div>
+                  <div>{}</div>
+                </div>
+
+                <div>
+                  {" "}
+                  <button
+                    className="rounded bg-blue-500 p-3"
+                    onClick={() => habit._id && removeHabit(habit._id)}
+                  >
+                    DELETE
+                  </button>
+                </div>
               </div>
             ))}
           </div>

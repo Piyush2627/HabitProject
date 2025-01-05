@@ -7,9 +7,6 @@ import { IoCloseCircleSharp } from "react-icons/io5";
 import SideNavigation from "../components/ui/SideNavigation";
 import CreateHabitPage from "../pages/CreateHabitPage";
 
-const fruits = ["Banana", "Orange", "Apple", "Mango"];
-fruits.sort();
-console.log(fruits);
 function MainLayout() {
   const [sideNavBar, setSideNavBar] = React.useState(false);
   const sideNavRef = useRef<HTMLDivElement>(null);
